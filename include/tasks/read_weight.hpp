@@ -9,7 +9,7 @@
 #define LOADCELL_SCK_PIN 22
 
 #define LOADCELL_OFFSET 50682624
-#define LOADCELL_DIVIDER 33874.877777
+#define LOADCELL_DIVIDER 33874.87
 
 HX711 loadCell;
 
@@ -110,27 +110,29 @@ void read_weight_code(void* parameters) {
   // loadCell.set_offset(LOADCELL_OFFSET);
 
   uint64_t timer = 0;
-  uint64_t initial_timer = millis();
   uint8_t count = 0;
   uint8_t lastCount = 0;
   float weight = 0;
   xQueueReceive(sender_weight_queue_init, &init, portMAX_DELAY);
+  uint64_t initial_timer = millis();
   while (init) {
     // read_hx711_motta();
-    weight = loadCell.get_units(2);
+    weight = loadCell.get_units(1);
     timer = millis() - initial_timer;
-    // Serial.println(weight, 3);
+    Serial.println(weight, 3);
     xQueueSend(sender_weight_queue, &weight, portMAX_DELAY);
     xQueueSend(timer_weight_queue, &timer, portMAX_DELAY);
     // vTaskDelay(pdMS_TO_TICKS(40));
     // while(true){}
     // count++;
-    // if(millis() > timer + 1000){
-    //   lastCount = count - lastCount;
-    //   Serial.println(lastCount);
-    //   // while(true){}
+    // if(millis() > initial_timer + 1000){
+    //   // lastCount = count - lastCount;
+    //   // Serial.println(lastCount);
+    //   Serial.println(count);
+    //   while(true){}
     // }
     vTaskDelay(1);
+    // vTaskDelay(pdMS_TO_TICKS(100));
   }
 }
 
