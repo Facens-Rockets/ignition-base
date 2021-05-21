@@ -20,7 +20,7 @@ void relay_action_code (void* parameters) {
   while (true) {
     xQueueReceive(relay_action_queue, &message, portMAX_DELAY);
 
-    if(message = 0x0A){
+    if(message == 0x0A){
       digitalWrite(relay_pin, LOW);
       vTaskDelay(pdMS_TO_TICKS(100));
       digitalWrite(relay_pin, HIGH);

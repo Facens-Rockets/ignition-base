@@ -11,6 +11,7 @@ QueueHandle_t relay_action_queue;
 QueueHandle_t relay_response_queue;
 QueueHandle_t sender_weight_queue;
 QueueHandle_t timer_weight_queue;
+QueueHandle_t sender_weight_queue_init;
 
 SemaphoreHandle_t lora_semaphore;
 
@@ -34,6 +35,7 @@ void setup_tasks() {
   relay_response_queue = xQueueCreate(2, sizeof(uint8_t));
   sender_weight_queue = xQueueCreate(1, sizeof(float));
   timer_weight_queue = xQueueCreate(1, sizeof(uint64_t));
+  sender_weight_queue_init = xQueueCreate(1, sizeof(bool));
 
   lora_semaphore = xSemaphoreCreateMutex();
 

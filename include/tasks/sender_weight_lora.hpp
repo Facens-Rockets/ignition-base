@@ -17,6 +17,9 @@ void sender_weight_lora_code(void* parameters) {
   // float weight_queue[10];
   float weight;
   uint64_t timer;
+  bool init = true;
+
+  xQueueSend(sender_weight_queue_init, &init, portMAX_DELAY);
 
   while(true){
     xQueueReceive(sender_weight_queue, &weight, portMAX_DELAY);
