@@ -26,7 +26,6 @@ void core_zero(int core = 0) {
 }
 void core_one(int core = 1) {
   xTaskCreatePinnedToCore(relay_action_code, "relay", 1000, NULL, 1, &relay_action_task, core);
-  // xTaskCreatePinnedToCore(read_weight_code, "weight", 1000, NULL, 2, &read_weight_task, core);
   xTaskCreatePinnedToCore(read_weight_code, "weight", 1000, NULL, 2, &read_weight_task, core);
 }
 
