@@ -25,13 +25,13 @@ void response_lora_code (void* parameters) {
 
   while (1) {
     xQueueReceive(relay_response_queue, &response, portMAX_DELAY);
+    // vTaskDelete(receiver_lora_task);
     xSemaphoreTake(lora_semaphore, portMAX_DELAY);
     send_lora_response(count_ignition);
     // vTaskResume(read_weight_task);
-    // xTaskCreatePinnedToCore(read_weight_code, "weight", 1000, NULL, 2, &read_weight_task, 1);
-    vTaskDelete(receiver_lora_task);
+    xTaskCreatePinnedToCore(read_weight_code, "weight", 1000, NULL, 2, &read_weight_task, 1);
     xTaskCreatePinnedToCore(sender_weight_lora_code, "weight", 1000, NULL, 2, &sender_weight_task, 0);
-    vTaskSuspend(response_lora_task);
+    // vTaskSuspend(response_lora_task);
     xSemaphoreGive(lora_semaphore);
     vTaskDelay(1);
   }

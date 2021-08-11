@@ -5,11 +5,16 @@
 #include "sender_weight_lora.hpp"
 #include "setup_tasks.hpp"
 
+#define LED_PIN 25
+
 #define LOADCELL_DOUT_PIN 12
 #define LOADCELL_SCK_PIN 22
 
 #define LOADCELL_OFFSET 50682624
-#define LOADCELL_DIVIDER 33874.87
+// #define LOADCELL_DIVIDER 33874.87 // old value
+// #define LOADCELL_DIVIDER 11258.912386 // new value
+// #define LOADCELL_DIVIDER 10198.791540 // 80Hz value
+#define LOADCELL_DIVIDER 30996.525679 // 80Hz value
 
 HX711 loadCell;
 
@@ -22,7 +27,8 @@ void calibrate_function_rockets() {
   loadCell.set_scale();  // Utiliza uma loadCell padrão de verificação
 
   loadCell.tare(20);  // Fixa o peso como tara
-  Serial.println("Insira o item para Pesar");
+  Serial.println("Insira o item para Pesar em 5 segundos...");
+  vTaskDelay(pdMS_TO_TICKS(5000));
 
   uint8_t count = 0;
   float media = 0;
@@ -32,13 +38,12 @@ void calibrate_function_rockets() {
     media += weight;
     Serial.print("Valor da Leitura:  ");
     Serial.println(weight, 0);  // Retorna peso descontada a tara
-    // vTaskDelay(portMAX_DELAY);
-    // count++;
-    // if (count >= 20) {
-    //   Serial.println(media / 20);
-    //   vTaskDelay(portMAX_DELAY);
-    // }
-    vTaskDelay(pdMS_TO_TICKS(100));
+    count++;
+    if (count >= 40) {
+      Serial.println(media / 40);
+      vTaskDelay(portMAX_DELAY);
+    }
+    vTaskDelay(pdMS_TO_TICKS(30));
   }
 }
 
@@ -96,8 +101,9 @@ void read_weight_code(void* parameters) {
 
   if (!loadCell.is_ready()) {
     Serial.println("stoped");
-    while (true) {
-    }
+    vTaskDelete(read_weight_task);
+    // while (true) {
+    // }
   }
   uint64_t adc = loadCell.read();
   Serial.println(adc);
