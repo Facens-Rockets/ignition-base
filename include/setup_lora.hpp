@@ -3,7 +3,7 @@
 
 #include "heltec.h"
 
-#define LORA_BAND 910E6
+#define LORA_BAND 915E6
 
 void setup_lora() { 
   LoRa.setSpreadingFactor(9);

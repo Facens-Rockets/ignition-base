@@ -14,7 +14,14 @@
 // #define LOADCELL_DIVIDER 33874.87 // old value
 // #define LOADCELL_DIVIDER 11258.912386 // new value
 // #define LOADCELL_DIVIDER 10198.791540 // 80Hz value
-#define LOADCELL_DIVIDER 30996.525679 // 80Hz value
+// #define LOADCELL_DIVIDER 30996.525679 // 80Hz value
+
+
+// #define LOADCELL_DIVIDER -61.07337 // 80Hz value
+// #define LOADCELL_DIVIDER -60.77895// 80Hz value
+#define LOADCELL_DIVIDER -32.9335048486// 80Hz value
+
+// #define LEADCELL_SCALE 61.07337
 
 HX711 loadCell;
 
@@ -26,7 +33,7 @@ void calibrate_function_rockets() {
   // peso Serial.println("Aguarde!"); Serial.println("Iniciando ...");
   loadCell.set_scale();  // Utiliza uma loadCell padrão de verificação
 
-  loadCell.tare(20);  // Fixa o peso como tara
+  loadCell.tare();  // Fixa o peso como tara
   Serial.println("Insira o item para Pesar em 5 segundos...");
   vTaskDelay(pdMS_TO_TICKS(5000));
 
